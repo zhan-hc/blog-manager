@@ -1,35 +1,59 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <div>
-    <!-- 测试了一下 效果正常 -->
-    <!-- <el-button type="primary">Primary</el-button>
-    <el-button type="warning">Warning</el-button> -->
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <el-container>
+    <el-header>
+      <div class="left">
+        <span>后台博客管理系统</span>
+      </div>
+      <div class="right">
+        <el-icon><setting /></el-icon>
+      </div>
+    </el-header>
+    <el-container class="main-container">
+      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+        <el-menu
+        default-active="2"
+        class="el-menu-vertical-demo"
+      >
+        <el-menu-item index="1">
+          <el-icon><icon-menu /></el-icon>
+          <span>个人信息管理</span>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <el-icon><icon-menu /></el-icon>
+          <span>文章管理</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <el-icon><setting /></el-icon>
+          <span>导航管理</span>
+        </el-menu-item>
+      </el-menu>
+      </el-aside>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style scoped lang="scss">
+.el-header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #B3C0D1;
+  line-height: 60px;
+  .left {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
 }
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+  .main-container {
+    height: calc(100vh - 60px);
+    .el-aside {
+      color: #333;
+    }
+  }
 </style>
