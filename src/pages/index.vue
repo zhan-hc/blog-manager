@@ -10,8 +10,8 @@
     </el-header>
     <el-container class="main-container">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <el-menu default-active="/home" class="el-menu-vertical-demo" router>
-          <el-menu-item index="/home">主页</el-menu-item>
+        <el-menu default-active="/" class="el-menu-vertical-demo" router>
+          <el-menu-item index="/">主页</el-menu-item>
           <el-menu-item index="/user">个人信息管理</el-menu-item>
           <el-sub-menu index="2">
             <template #title>文章管理</template>
