@@ -5,7 +5,7 @@
         <span>后台博客管理系统</span>
       </div>
       <div class="right">
-        <el-icon><setting /></el-icon>
+        <i-ep-setting></i-ep-setting>
       </div>
     </el-header>
     <el-container class="main-container">
@@ -30,7 +30,6 @@
 </template>
 
 <script lang='ts' setup>
-import { Setting } from "@element-plus/icons-vue";
 </script>
 
 <style scoped lang='scss'>

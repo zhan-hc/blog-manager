@@ -8,26 +8,27 @@ import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(),
-  AutoImport({
-    resolvers: [
-      ElementPlusResolver(),
-      IconsResolver({
-        prefix: 'Icon',
-      })
-    ],
-  }),
-  Components({
-    resolvers: [
-      IconsResolver({
-        enabledCollections: ['ep'],
-      }),
-      ElementPlusResolver()
-    ]
-  }),
-  Icons({
-    autoInstall: true
-  })
+  plugins: [
+    vue(),
+    AutoImport({
+      resolvers: [
+        ElementPlusResolver(),
+        IconsResolver({
+          prefix: 'Icon',
+        })
+      ],
+    }),
+    Components({
+      resolvers: [
+        IconsResolver({
+          enabledCollections: ['ep'],
+        }),
+        ElementPlusResolver()
+      ]
+    }),
+    Icons({
+      autoInstall: true
+    })
   ],
   resolve: {
     alias: {
