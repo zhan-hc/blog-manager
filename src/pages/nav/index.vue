@@ -5,11 +5,14 @@
 </template>
 
 <script lang='ts' setup>
-import { getJumpTypes } from "@/api/jump";
+import { addArticle } from "@/api/atricle";
+// import { getJumpTypes } from "@/api/jump";
 import { onMounted } from 'vue'
 
   onMounted(async () => {
-    const [err, data]:any = await getJumpTypes()
+    const [err, data]:any = await addArticle({
+      article_content: 'sadsadasd'
+    })
     console.log(err, data, 'err data')
   })
   

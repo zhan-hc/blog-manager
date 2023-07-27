@@ -9,3 +9,10 @@ export const getArticleList = () => {
     method: 'GET'
   })
 }
+export const addArticle = (data: any) => {
+  return MyRequest.request({
+    url: '/article/addArticle',
+    method: 'POST',
+    data
+  })
+}
