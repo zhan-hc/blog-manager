@@ -1,11 +1,17 @@
 import { onMounted, reactive, toRefs } from 'vue'
+import { CategoryType } from '@/constants/types';
+import { getCategoryList } from '@/api/category';
 export default function () {
 
   const state: {
-  } = reactive({})
+    categoryList: CategoryType[]
+  } = reactive({
+    categoryList: []
+  })
 
-  onMounted(() => {
-    
+  onMounted(async () => {
+    const [err, { categoryList = [] }]:any = await getCategoryList()
+    state.categoryList = categoryList
   })
 
   return {

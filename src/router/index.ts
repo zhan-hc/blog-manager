@@ -36,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
           component: () => import("@/pages/nav/index.vue")
         }
     ]
+  },
+  {
+    path: "/articleDetail/:id?",
+    name: 'ArticleDetail',
+    component: () => import("@/pages/article/article-detail.vue"),
   }
 ];
 

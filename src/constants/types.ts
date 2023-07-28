@@ -12,10 +12,18 @@ export interface ArticleType {
   article_url: string;
   article_cover: string;
 }
-export interface tagType {
+export interface TagType {
     tag_id: number;
     tag_name: string;
     tag_desc: string;
     create_time: Date;
     update_time: Date;
+}
+
+export interface CategoryType {
+  category_id: number;
+  category_name?: string;
+  category_desc?: string;
+  create_time?: Date;
+  update_time?: Date;
 }

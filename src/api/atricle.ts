@@ -9,6 +9,15 @@ export const getArticleList = () => {
     method: 'GET'
   })
 }
+
+export const getArticleDetail = (id: string) => {
+  return MyRequest.request({
+    url: '/article/getArticleDetail',
+    method: 'GET',
+    params: { id }
+  })
+}
+
 export const addArticle = (data: any) => {
   return MyRequest.request({
     url: '/article/addArticle',
