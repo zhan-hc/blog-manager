@@ -1,7 +1,7 @@
 import { reactive, toRefs, ref, onMounted } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus';
 import useRouter from '@/hook/common/useRouter'
-import { getArticleDetail } from '@/api/atricle';
+import { addArticle, getArticleDetail, updateArticle } from '@/api/atricle';
 export default function () {
 
   const { getRouterParams } = useRouter()
@@ -30,9 +30,22 @@ export default function () {
 
   const submitForm = async () => {
     if (!articleForm.value) return
-    await articleForm.value.validate((valid, fields) => {
+    await articleForm.value.validate(async (valid, fields) => {
       if (valid) {
-        console.log('submit!')
+        const params = {
+          ...state.formData,
+          article_tag: state.tag_ids.toString(),
+          update_time: +new Date()
+        }
+        const article_id = getRouterParams('id')
+        if (article_id) {
+          params.article_id = Number(article_id)
+          await updateArticle(params)
+        } else {
+          params.create_time = +new Date()
+          await addArticle(params)
+        }
+        console.log('submit!', state.formData)
       } else {
         console.log('error submit!', fields)
       }

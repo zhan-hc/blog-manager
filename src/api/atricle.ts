@@ -3,10 +3,11 @@ import MyRequest from '@/services/index'
  * 调用demo
  * cosnt [err, res] = await getUser()
 */
-export const getArticleList = () => {
+export const getArticleList = (params: any) => {
   return MyRequest.request({
     url: '/article/getArticleList',
-    method: 'GET'
+    method: 'GET',
+    params
   })
 }
 
@@ -23,5 +24,23 @@ export const addArticle = (data: any) => {
     url: '/article/addArticle',
     method: 'POST',
     data
+  })
+}
+
+export const updateArticle = (data: any) => {
+  return MyRequest.request({
+    url: '/article/updateArticle',
+    method: 'POST',
+    data
+  })
+}
+
+export const deleteArticle = (id: number) => {
+  return MyRequest.request({
+    url: '/article/deleteArticle',
+    method: 'DELETE',
+    data: {
+      id
+    }
   })
 }

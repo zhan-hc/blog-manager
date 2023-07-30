@@ -16,7 +16,7 @@ export default function () {
         router.push(path);
         break;
       case 'replace': 
-        router.push(path);
+        router.replace(path);
         break;
       case 'back': 
         router.back();

@@ -36,7 +36,7 @@
       <el-table-column fixed="right" label="Operations" width="200">
         <template #default="scope">
           <el-button type="primary" size="small" @click="routerGo(`/articleDetail/${scope.row.article_id}`)">编辑</el-button>
-          <el-button type="danger" size="small">删除</el-button>
+          <el-button type="danger" size="small" @click="delArticle(scope.row.article_id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +52,7 @@ import useRouter from '@/hook/common/useRouter'
 
 const { tagList } = useTag()
 const { categoryList } = useCategory()
-const { articleList,  selectInput } = useArticle()
+const { articleList,  selectInput, delArticle } = useArticle()
 const { formatDate } = useDate()
 const { routerGo } = useRouter()
 
