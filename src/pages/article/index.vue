@@ -1,11 +1,19 @@
 <template>
-  <div>
+  <div class="article-container">
     <div class="article-top">
-      <el-input v-model="selectInput" style="width: 200px; margin-right: 10px;" size="large" placeholder="文章标题模糊搜索"></el-input>
-      <el-button type="primary" @click="routerGo('/articleDetail')">新增</el-button>
+      <el-button class="mr-10" type="primary" @click="routerGo('/articleDetail')">新增</el-button>
+      <el-input class="mr-10" v-model="selectInput" style="width: 200px;" placeholder="文章标题模糊搜索"></el-input>
+      <el-select class="mr-10" v-model="categoryId" placeholder="文章分类" @change="getAllArticle">
+        <el-option :label="item.category_name" :value="item.category_id" v-for="item in categoryList" :key="item.category_id"></el-option>
+      </el-select>
+      <el-select class="mr-10" v-model="tagId" placeholder="文章标签" @change="getAllArticle">
+        <el-option :label="item.tag_name" :value="item.tag_id" v-for="item in tagList" :key="item.tag_id"></el-option>
+      </el-select>
+      <el-button @click="initData">重置</el-button>
+      <el-button type="primary" @click="getAllArticle">搜索</el-button>
     </div>
     <el-table :data="articleList" style="width: 100%">
-      <el-table-column fixed prop="article_title" label="文章标题"/>
+      <el-table-column fixed prop="article_title" label="文章标题" width="200"/>
       <el-table-column prop="article_desc" label="文章描述" width="200"/>
       <el-table-column prop="category_id" label="文章分类">
         <template #default="scope">
@@ -14,7 +22,9 @@
       </el-table-column>
       <el-table-column prop="article_tag" label="文章标签" width="160">
         <template #default="scope">
-          <el-tag type="success" v-for="item in scope.row.article_tag.split(',').map(Number)" :key="item">{{ tagList.find(tag => tag.tag_id === item)?.tag_name }}</el-tag>
+          <div v-if="scope.row.article_tag">
+            <el-tag type="success" v-for="item in scope.row.article_tag.split(',').map(Number)" :key="item">{{ tagList.find(tag => tag.tag_id === item)?.tag_name }}</el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column prop="article_cover" label="文章图片" width="120" />
@@ -36,10 +46,12 @@
       <el-table-column fixed="right" label="Operations" width="200">
         <template #default="scope">
           <el-button type="primary" size="small" @click="routerGo(`/articleDetail/${scope.row.article_id}`)">编辑</el-button>
-          <el-button type="danger" size="small" @click="delArticle(scope.row.article_id)">删除</el-button>
+          <el-button type="danger" size="small" @click="delArticle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination background layout="prev, pager, next" :total="total" v-model:page-size="pageSize" v-model:current-page="pageNo"
+    @update:current-page="getAllArticle" @update:page-size="getAllArticle"/>
   </div>
 </template>
 
@@ -50,14 +62,26 @@ import useCategory from '@/hook/article/useCategory'
 import useDate from '@/hook/common/useDate'
 import useRouter from '@/hook/common/useRouter'
 
-const { tagList } = useTag()
-const { categoryList } = useCategory()
-const { articleList,  selectInput, delArticle } = useArticle()
 const { formatDate } = useDate()
 const { routerGo } = useRouter()
+const { tagList } = useTag()
+const { categoryList } = useCategory()
+const { total, tagId, categoryId, pageNo, pageSize, articleList,  selectInput, initData, delArticle, getAllArticle } = useArticle()
 
 </script>
 
 <style scoped lang='scss'>
-  
-</style>@/hook/common/useRouterFun
+  .article-container {
+    .article-top {
+      margin-bottom: 20px;
+      .mr-10 {
+        margin-right: 10px;
+      }
+    }
+    .el-pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+  }
+</style>

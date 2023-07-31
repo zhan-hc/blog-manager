@@ -4,7 +4,7 @@ import useRouter from '@/hook/common/useRouter'
 import { addArticle, getArticleDetail, updateArticle } from '@/api/atricle';
 export default function () {
 
-  const { getRouterParams } = useRouter()
+  const { getRouterParams, routerGo } = useRouter()
   const articleForm = ref<FormInstance>()
 
   const state: {
@@ -45,6 +45,11 @@ export default function () {
           params.create_time = +new Date()
           await addArticle(params)
         }
+        ElMessage({
+          type: 'success',
+          message: article_id ? '更新文章成功' : '新建文章成功',
+        })
+        routerGo('', 'back')
         console.log('submit!', state.formData)
       } else {
         console.log('error submit!', fields)
@@ -70,7 +75,6 @@ export default function () {
     if (id) {
       state.id = id as string
       const [err, {article = {} }]:any = await getArticleDetail(id as string)
-      console.log(article, 'articlearticlearticlearticlearticle')
       editForm(article)
     }
   })
