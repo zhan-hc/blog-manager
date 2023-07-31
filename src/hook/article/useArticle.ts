@@ -31,7 +31,11 @@ export default function () {
         type: 'warning',
       }
     ).then(async () => {
-      await deleteArticle(data.id)
+      await deleteArticle(data.article_id)
+      ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
       await getAllArticle()
     })
     .catch(() => {
