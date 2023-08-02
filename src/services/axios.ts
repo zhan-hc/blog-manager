@@ -2,7 +2,6 @@ import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, CreateAxiosDef
 import { RequestOptions} from './type'
 import { AxiosCanceler } from './cancel'
 import { handleNetworkError } from './tool';
-
 class MyAxios {
   instance: AxiosInstance;
   customOptions?: RequestOptions;
@@ -20,9 +19,9 @@ class MyAxios {
       (config: InternalAxiosRequestConfig) => {
         // 取消重复请求
         this.customOptions?.repect_request_cacel && AxiosCancel.addPending(config)
-
+        config.headers['x-need-token'] = true
         // 添加token
-        const token = localStorage.getItem('xxx_token')
+        const token = localStorage.getItem('access_token')
         if (token && config.headers) {
           config.headers.Authorization = token
         }
@@ -41,6 +40,13 @@ class MyAxios {
         return res
       },
       (err: any) => {
+        ElMessage({
+          type: 'error',
+          message: handleNetworkError(err?.response?.status || err.code)
+        })
+        if (err?.response?.status === 401) {
+          window.location = "/login"
+        }
         console.error(handleNetworkError(err?.response?.status || err.code), err.message)
       }
     )

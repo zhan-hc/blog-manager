@@ -27,3 +27,8 @@ export interface CategoryType {
   create_time?: Date;
   update_time?: Date;
 }
+
+export interface LoginType {
+  username: string,
+  password: string
+}
