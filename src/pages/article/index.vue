@@ -27,7 +27,14 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="article_cover" label="文章图片" width="120" />
+      <el-table-column prop="article_cover" label="文章图片" width="200">
+        <template #default="scope">
+          <div v-if="scope.row.article_cover" style="width: 120px;height: 120px;border-radius: 6px;">
+            <img :src="scope.row.article_cover" alt="" style="width: 100%;height: 100%;object-fit: contain;">
+          </div>
+          <span v-else>无封面图</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="create_time" label="创建时间" width="180">
         <template #default="scope">
           <span>{{ formatDate(scope.row.create_time) }}</span>

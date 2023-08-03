@@ -48,6 +48,7 @@ export default  ({ mode }) => {
       alias: {
         '@': resolve(__dirname, './src')
       },
-    }
+    },
+    base: './'
   })
 }

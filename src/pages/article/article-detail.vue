@@ -17,6 +17,18 @@
         <el-form-item label="文章名称" prop="article_title">
           <el-input v-model="formData.article_title" />
         </el-form-item>
+        <el-form-item label="文章封面" prop="article_cover">
+          <el-upload
+            class="image-uploader"
+            :action="`${envApiHost}/upload/file`"
+            :show-file-list="false"
+            :before-upload="beforeUpload"
+            :on-success="uploadSuccess"
+          >
+            <img v-if="formData.article_cover" :src="formData.article_cover" class="article-image" />
+            <el-icon v-else class="image-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="文章描述" prop="article_desc">
           <el-input v-model="formData.article_desc" />
         </el-form-item>
@@ -47,11 +59,13 @@ import useTag from '@/hook/article/useTag'
 import usePopover from '@/hook/common/usePopover'
 import useCategory from '@/hook/article/useCategory'
 import useArticleDetail from '@/hook/article/useArticleDetail'
+import { envApiHost } from '@/utils/env';
+import { Plus } from '@element-plus/icons-vue'
 
 const { tagList } = useTag()
 const { categoryList } = useCategory()
 const { visible, isAdd, openPopover } = usePopover()
-const { id, articleForm, formData, tag_ids, formRule, submitForm, resetAllStatus } = useArticleDetail()
+const { id, articleForm, formData, tag_ids, formRule, submitForm, resetAllStatus, beforeUpload, uploadSuccess } = useArticleDetail()
 </script>
 
 <style scoped lang='scss'>
@@ -71,6 +85,31 @@ const { id, articleForm, formData, tag_ids, formRule, submitForm, resetAllStatus
   }
   .v-md-editor {
     height: calc(100vh - 64px);
+  }
+  .image-uploader {
+    :deep(.el-upload) {
+      border: 1px dashed #dcdfe6;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: .2s;
+      &:hover {
+        border-color: #409eff;
+      }
+      .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+      }
+      .image-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        text-align: center;
+      }
+    }
   }
 }
   

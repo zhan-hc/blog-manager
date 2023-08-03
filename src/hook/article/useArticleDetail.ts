@@ -1,5 +1,5 @@
 import { reactive, toRefs, ref, onMounted } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus';
+import type { FormInstance, FormRules, UploadProps } from 'element-plus';
 import useRouter from '@/hook/common/useRouter'
 import { addArticle, getArticleDetail, updateArticle } from '@/api/atricle';
 export default function () {
@@ -69,6 +69,18 @@ export default function () {
     }
     cb()
   }
+  const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
+    const imgfileType = ['image/gif','image/jpeg','image/jpg','image/pjpeg','image/x-png','image/png']
+    if (!imgfileType.includes(rawFile.type)) {
+      ElMessage.error('上传文件的格式不正确，请上传一下gif,jpeg,jpg,png格式!')
+      return false
+    }
+    return true
+  }
+
+  const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    state.formData.article_cover = response.data.imgUrl
+  }
 
   onMounted(async () => {
     const id = getRouterParams('id')
@@ -82,6 +94,8 @@ export default function () {
     ...toRefs(state),
     articleForm,
     editForm,
-    submitForm
+    submitForm,
+    beforeUpload,
+    uploadSuccess
   }
 }

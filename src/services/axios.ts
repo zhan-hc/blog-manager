@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios';
-import { RequestOptions} from './type'
-import { AxiosCanceler } from './cancel'
+import { RequestOptions} from './type';
+import { AxiosCanceler } from './cancel';
 import { handleNetworkError } from './tool';
 class MyAxios {
   instance: AxiosInstance;
@@ -45,7 +45,7 @@ class MyAxios {
           message: handleNetworkError(err?.response?.status || err.code)
         })
         if (err?.response?.status === 401) {
-          window.location = "/login"
+          window.location = "/admin/login" // 因在服务器配置了admin前缀所以此处需要加/admin
         }
         console.error(handleNetworkError(err?.response?.status || err.code), err.message)
       }
