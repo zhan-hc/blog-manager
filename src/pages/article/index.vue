@@ -9,6 +9,10 @@
       <el-select class="mr-10" v-model="tagId" placeholder="文章标签" @change="getAllArticle">
         <el-option :label="item.tag_name" :value="item.tag_id" v-for="item in tagList" :key="item.tag_id"></el-option>
       </el-select>
+      <el-select class="mr-10" v-model="status" placeholder="文章状态" @change="getAllArticle">
+        <el-option label="启用" :value="1" ></el-option>
+        <el-option label="下架" :value="0" ></el-option>
+      </el-select>
       <el-button @click="initData">重置</el-button>
       <el-button type="primary" @click="getAllArticle">搜索</el-button>
     </div>
@@ -45,9 +49,9 @@
           <span>{{ formatDate(scope.row.update_time) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="article_status" label="状态" width="120" >
+      <el-table-column prop="status" label="状态" width="120" >
         <template #default="scope">
-          <el-button :type="scope.row.article_status ? 'danger' : 'primary'" size="small">{{scope.row.article_status ? '下架' : '启用'}}</el-button>
+          <el-button @click="updateStatus(scope.row)" :type="scope.row.status ? 'danger' : 'primary'" size="small">{{scope.row.status ? '下架' : '启用'}}</el-button>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="Operations" width="200">
@@ -73,7 +77,7 @@ const { formatDate } = useDate()
 const { routerGo } = useRouter()
 const { tagList } = useTag()
 const { categoryList } = useCategory()
-const { total, tagId, categoryId, pageNo, pageSize, articleList,  selectInput, initData, delArticle, getAllArticle } = useArticle()
+const { total, tagId, categoryId, status, pageNo, pageSize, articleList,  selectInput, initData, delArticle, getAllArticle, updateStatus } = useArticle()
 
 </script>
 

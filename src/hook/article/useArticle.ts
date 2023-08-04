@@ -1,5 +1,5 @@
 import { onMounted, reactive, toRefs, ref } from 'vue'
-import { getArticleList, deleteArticle } from "@/api/atricle";
+import { getArticleList, deleteArticle, updateArticle } from "@/api/atricle";
 import { ArticleType } from '@/constants/types';
 export default function () {
 
@@ -8,6 +8,7 @@ export default function () {
     articleList: ArticleType[];
     pageSize: number;
     pageNo: number;
+    status: number | null;
     tagId: number[] | null;
     categoryId: number | null;
     total: number;
@@ -16,6 +17,7 @@ export default function () {
     articleList: [],
     tagId: null,
     categoryId: null,
+    status: null,
     pageSize: 10,
     pageNo: 1,
     total: 0
@@ -41,6 +43,29 @@ export default function () {
     .catch(() => {
     })
   }
+  const updateStatus = async (data: any) => {
+    ElMessageBox.confirm(
+      ` 确认${data.status ? '下架' : '启用'}《${data.article_title}》文章吗?`,
+       'Warning',
+       {
+         confirmButtonText: '确认',
+         cancelButtonText: '取消',
+         type: 'warning',
+       }
+     ).then(async () => {
+       await updateArticle({
+        article_id: data.article_id,
+        status: !data.status
+      })
+       ElMessage({
+         type: 'success',
+         message: `${data.status ? '下架' : '启用'}成功`,
+       })
+       await getAllArticle()
+     })
+     .catch(() => {
+     })
+  }
 
   const getAllArticle = async () => {
     const params:any = {
@@ -50,6 +75,10 @@ export default function () {
       pageNo: state.pageNo,
       tagId: state.tagId
     }
+    if (state.status != null && [1,0].includes(state.status)) {
+      params.status = state.status
+    }
+    console.log(params, 'paramsparamsparamsparams')
     const [err, { articleList = [], total = 0 }]:any = await getArticleList(params)
     state.articleList = articleList
     state.total = total
@@ -59,6 +88,7 @@ export default function () {
     state.selectInput = ''
     state.tagId = null,
     state.categoryId = null
+    state.status = null
     state.pageSize = 10
     state.pageNo = 1
     getAllArticle()
@@ -72,6 +102,7 @@ export default function () {
     ...toRefs(state),
     initData,
     delArticle,
-    getAllArticle
+    getAllArticle,
+    updateStatus
   }
 }

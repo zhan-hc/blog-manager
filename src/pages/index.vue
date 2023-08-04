@@ -11,7 +11,7 @@
           <div v-else>未登录</div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+              <el-dropdown-item @click="logout">{{user_id ? '退出登录' : '登录'}}</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -43,7 +43,7 @@
   import useRouter from '@/hook/common/useRouter'
   const { Local } = useStorage()
   const { routerGo } = useRouter()
-  const { avatar_url = '', user_name = '' } = Local.get('userInfo') || {}
+  const { avatar_url = '', user_name = '', user_id = '' } = Local.get('userInfo') || {}
   const logout = () => {
     Local.clear()
     routerGo('/login')
