@@ -34,7 +34,7 @@ export default function () {
       if (valid) {
         const params = {
           ...state.formData,
-          article_tag: state.tag_ids.toString(),
+          tagIds: state.tag_ids,
           update_time: +new Date()
         }
         const article_id = getRouterParams('id')
@@ -58,8 +58,8 @@ export default function () {
   }
 
   const editForm = (data: any, cb: any = () => {}) => {
-    const { article_title, article_desc, article_cover, article_tag, category_id, article_content } = data
-    state.tag_ids = article_tag.split(',').map(Number)
+    const { article_title, article_desc, article_cover, category_id, article_content, tag_id_blog_tags } = data
+    state.tag_ids = tag_id_blog_tags.map((item: {tag_id: number}) => item.tag_id)
     state.formData = {
       article_title,
       article_desc,

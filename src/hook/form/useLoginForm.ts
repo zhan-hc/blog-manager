@@ -1,9 +1,14 @@
-import { reactive, toRefs, ref } from "vue"
+import { reactive, toRefs, ref } from "vue";
 import type { FormInstance, FormRules } from 'element-plus';
-import { LoginType } from "@/constants/types"
+import { LoginType } from "@/constants/types";
+import { authLogin } from "@/api/login";
+import useRouter from '@/hook/common/useRouter'
+import useStorage from "../common/useStorage";
 
 export default function () {
 
+  const { routerGo } = useRouter()
+  const { Local } = useStorage()
   const loginForm = ref<FormInstance>()
   const state: {
     formData: LoginType;
@@ -23,7 +28,14 @@ export default function () {
     if (!loginForm.value) return
     await loginForm.value.validate(async (valid, fields) => {
       if (valid) {
-        console.log('zzzzzzzz')
+        const [err, { user = {}, access_token = ''}]:any = await authLogin(state.formData)
+        Local.set('userInfo', user)
+        Local.set('access_token', `Bearer ${access_token}`)
+        !err && ElMessage({
+          type: 'success',
+          message: '登录成功'
+        })
+        routerGo('/')
       } else {
         console.log('error')
       }

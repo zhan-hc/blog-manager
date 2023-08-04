@@ -5,7 +5,16 @@
         <span>后台博客管理系统</span>
       </div>
       <div class="right">
-        <i-ep-setting></i-ep-setting>
+        <span v-if="user_name" style="margin-right: 10px;">{{ user_name }}</span>
+        <el-dropdown>
+          <img v-if="avatar_url" :src="avatar_url" alt="" width="28" height="28" style="border-radius: 50%;" />
+          <div v-else>未登录</div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </el-header>
     <el-container class="main-container">
@@ -30,6 +39,15 @@
 </template>
 
 <script lang='ts' setup>
+  import useStorage from "@/hook/common/useStorage";
+  import useRouter from '@/hook/common/useRouter'
+  const { Local } = useStorage()
+  const { routerGo } = useRouter()
+  const { avatar_url = '', user_name = '' } = Local.get('userInfo') || {}
+  const logout = () => {
+    Local.clear()
+    routerGo('/login')
+  }
 </script>
 
 <style scoped lang='scss'>
@@ -43,6 +61,10 @@
     font-size: 18px;
     font-weight: bold;
     letter-spacing: 2px;
+  }
+  .right {
+    display: flex;
+    align-items: center;
   }
 }
   .main-container {

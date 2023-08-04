@@ -22,8 +22,8 @@
       </el-table-column>
       <el-table-column prop="article_tag" label="文章标签" width="160">
         <template #default="scope">
-          <div v-if="scope.row.article_tag">
-            <el-tag type="success" v-for="item in scope.row.article_tag.split(',').map(Number)" :key="item">{{ tagList.find(tag => tag.tag_id === item)?.tag_name }}</el-tag>
+          <div v-if="scope.row.tag_id_blog_tags">
+            <el-tag style="margin-right: 10px;" type="success" v-for="item in scope.row.tag_id_blog_tags" :key="item">{{ tagList.find(tag => tag.tag_id === item.tag_id)?.tag_name }}</el-tag>
           </div>
         </template>
       </el-table-column>

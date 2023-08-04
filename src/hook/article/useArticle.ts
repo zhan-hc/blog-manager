@@ -8,7 +8,7 @@ export default function () {
     articleList: ArticleType[];
     pageSize: number;
     pageNo: number;
-    tagId: number | null;
+    tagId: number[] | null;
     categoryId: number | null;
     total: number;
   } = reactive({
@@ -43,12 +43,12 @@ export default function () {
   }
 
   const getAllArticle = async () => {
-    const params = {
+    const params:any = {
       article_title: state.selectInput,
-      article_tag: state.tagId,
       category_id: state.categoryId,
       pageSize: state.pageSize,
-      pageNo: state.pageNo
+      pageNo: state.pageNo,
+      tagId: state.tagId
     }
     const [err, { articleList = [], total = 0 }]:any = await getArticleList(params)
     state.articleList = articleList

@@ -7,7 +7,6 @@ export default function () {
   })
 
   const openPopover = (isAdd = true) => {
-    console.log(isAdd, 'isAddisAddisAddisAdd')
     state.isAdd = isAdd
     state.visible = true
   }
