@@ -22,13 +22,17 @@
         <el-menu default-active="/" class="el-menu-vertical-demo" router>
           <el-menu-item index="/">主页</el-menu-item>
           <el-menu-item index="/user">个人信息管理</el-menu-item>
-          <el-sub-menu index="2">
+          <el-sub-menu>
             <template #title>文章管理</template>
             <el-menu-item index="/article">内容管理</el-menu-item>
             <el-menu-item index="/category">分类管理</el-menu-item>
             <el-menu-item index="/tag">标签管理</el-menu-item>
           </el-sub-menu>
-          <el-menu-item index="/nav">导航管理</el-menu-item>
+          <el-sub-menu>
+            <template #title>快捷导航管理</template>
+            <el-menu-item index="/navLink">导航链接管理</el-menu-item>
+            <el-menu-item index="/navType">导航类型管理</el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
       <el-main>
@@ -39,9 +43,9 @@
 </template>
 
 <script lang='ts' setup>
-  import useStorage from "@/hook/common/useStorage";
   import useRouter from '@/hook/common/useRouter'
-  const { Local } = useStorage()
+  import { Local } from "@/utils/local"
+
   const { routerGo } = useRouter()
   const { avatar_url = '', user_name = '', user_id = '' } = Local.get('userInfo') || {}
   const logout = () => {

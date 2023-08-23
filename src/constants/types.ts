@@ -13,11 +13,11 @@ export interface ArticleType {
   article_cover: string;
 }
 export interface TagType {
-    tag_id: number;
-    tag_name: string;
-    tag_desc: string;
-    create_time: Date;
-    update_time: Date;
+  tag_id: number;
+  tag_name: string;
+  tag_desc: string;
+  create_time: Date;
+  update_time: Date;
 }
 
 export interface CategoryType {
@@ -31,4 +31,21 @@ export interface CategoryType {
 export interface LoginType {
   username: string,
   password: string
+}
+
+export interface LinkType {
+  link_id?: number;
+  link_icon: string;
+  link_name: string;
+  link_desc: string;
+  link_url: string;
+  jump_id: number;
+  link_priority: number;
+}
+
+export interface jumpType {
+  jump_id?: number;
+  jump_tag: string;
+  jump_desc: string;
+  jump_priority: number;
 }

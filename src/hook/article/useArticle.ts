@@ -1,6 +1,8 @@
 import { onMounted, reactive, toRefs, ref } from 'vue'
 import { getArticleList, deleteArticle, updateArticle } from "@/api/atricle";
 import { ArticleType } from '@/constants/types';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
 export default function () {
 
   const state: {
@@ -78,7 +80,6 @@ export default function () {
     if (state.status != null && [1,0].includes(state.status)) {
       params.status = state.status
     }
-    console.log(params, 'paramsparamsparamsparams')
     const [err, { articleList = [], total = 0 }]:any = await getArticleList(params)
     state.articleList = articleList
     state.total = total

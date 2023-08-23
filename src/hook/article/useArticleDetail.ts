@@ -1,7 +1,7 @@
 import { reactive, toRefs, ref, onMounted } from 'vue'
-import type { FormInstance, FormRules, UploadProps } from 'element-plus';
+import { ElMessage, type FormInstance, type FormRules, type UploadProps } from 'element-plus'
+import { addArticle, getArticleDetail, updateArticle } from '@/api/atricle'
 import useRouter from '@/hook/common/useRouter'
-import { addArticle, getArticleDetail, updateArticle } from '@/api/atricle';
 export default function () {
 
   const { getRouterParams, routerGo } = useRouter()
@@ -24,7 +24,7 @@ export default function () {
     },
     formRule: {
       article_title: { required: true, message: '请输入文章标题', trigger: 'blur' },
-      category_id: {required: true, message: '请选择文章分类', trigger: 'blur'}
+      category_id: { required: true, message: '请选择文章分类', trigger: 'blur'}
     }
   })
 

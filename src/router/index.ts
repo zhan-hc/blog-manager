@@ -31,9 +31,14 @@ const routes: Array<RouteRecordRaw> = [
           component: () => import("@/pages/article/tag.vue"),
         },
         {
-          path: "/nav",
-          name: "Nav",
-          component: () => import("@/pages/nav/index.vue")
+          path: "/navType",
+          name: "navType",
+          component: () => import("@/pages/nav/navType.vue")
+        },
+        {
+          path: "/navLink",
+          name: "navLink",
+          component: () => import("@/pages/nav/navLink.vue")
         }
     ]
   },

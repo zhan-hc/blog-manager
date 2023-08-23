@@ -1,14 +1,12 @@
 import { reactive, toRefs, ref } from "vue";
-import type { FormInstance, FormRules } from 'element-plus';
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { LoginType } from "@/constants/types";
 import { authLogin } from "@/api/login";
 import useRouter from '@/hook/common/useRouter'
-import useStorage from "../common/useStorage";
-
+import { Local } from "@/utils/local"
 export default function () {
 
   const { routerGo } = useRouter()
-  const { Local } = useStorage()
   const loginForm = ref<FormInstance>()
   const state: {
     formData: LoginType;

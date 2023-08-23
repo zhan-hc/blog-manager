@@ -59,7 +59,7 @@ import useTag from '@/hook/article/useTag'
 import usePopover from '@/hook/common/usePopover'
 import useCategory from '@/hook/article/useCategory'
 import useArticleDetail from '@/hook/article/useArticleDetail'
-import { envApiHost } from '@/utils/env';
+import { envApiHost } from '@/utils/env'
 import { Plus } from '@element-plus/icons-vue'
 
 const { tagList } = useTag()
