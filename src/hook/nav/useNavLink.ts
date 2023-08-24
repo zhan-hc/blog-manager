@@ -1,7 +1,6 @@
 import { onMounted, reactive, toRefs, ref } from 'vue'
 import { getFilterLinks, deleteLink } from '@/api/links'
 import { LinkType } from '@/constants/types'
-import { ElMessage, ElMessageBox } from 'element-plus'
 export default function () {
 
   const state: {
@@ -9,11 +8,13 @@ export default function () {
     linkList: LinkType[];
     pageSize: number;
     pageNo: number;
+    jumpId: number | null
     total: number;
   } = reactive({
     selectInput: '',
     linkList: [],
     pageSize: 10,
+    jumpId: null,
     pageNo: 1,
     total: 0
   })
@@ -45,12 +46,18 @@ export default function () {
       pageSize: state.pageSize,
       pageNo: state.pageNo
     }
+    if (state.jumpId) {
+      params['jump_id'] = state.jumpId
+    }
     const [err, { links = [], total = 0 }]:any = await getFilterLinks(params)
     state.linkList = links
     state.total = total
   }
 
-
+  const initFilterData = () => {
+    state.selectInput = ''
+    state.jumpId = null
+  }
 
   onMounted(async () => {
     getLinkList()
@@ -59,6 +66,7 @@ export default function () {
   return {
     ...toRefs(state),
     deleteLinks,
-    getLinkList
+    getLinkList,
+    initFilterData
   }
 }

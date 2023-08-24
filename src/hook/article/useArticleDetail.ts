@@ -1,5 +1,5 @@
 import { reactive, toRefs, ref, onMounted } from 'vue'
-import { ElMessage, type FormInstance, type FormRules, type UploadProps } from 'element-plus'
+import { type FormInstance, type FormRules, type UploadProps } from 'element-plus'
 import { addArticle, getArticleDetail, updateArticle } from '@/api/atricle'
 import useRouter from '@/hook/common/useRouter'
 export default function () {

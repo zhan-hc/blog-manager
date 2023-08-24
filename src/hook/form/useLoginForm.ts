@@ -1,5 +1,5 @@
 import { reactive, toRefs, ref } from "vue";
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+import { type FormInstance, type FormRules } from 'element-plus';
 import { LoginType } from "@/constants/types";
 import { authLogin } from "@/api/login";
 import useRouter from '@/hook/common/useRouter'

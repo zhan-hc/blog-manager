@@ -1,7 +1,6 @@
 import { onMounted, reactive, toRefs, ref } from 'vue'
-import { getJumpTypes, addJump, updateJump, deleteJump } from "@/api/jump"
+import { getJumpTypes, deleteJump } from "@/api/jump"
 import { jumpType } from '@/constants/types'
-import { ElMessage, ElMessageBox } from 'element-plus'
 export default function () {
 
   const state: {
@@ -20,7 +19,7 @@ export default function () {
 
   const deleteJumpType = async (data: any) => {
     ElMessageBox.confirm(
-     ` 删除前，请先确认该链接类型没有关联链接！确认删除 ${data.link_name} 导航链接类型吗?`,
+     ` 删除前，请先确认该链接类型有没有关联链接！确认删除 ${data.jump_tag} 导航类型吗?`,
       'Warning',
       {
         confirmButtonText: '确认',

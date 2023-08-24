@@ -1,9 +1,13 @@
 <template>
   <div class="nav-container">
     <div class="nav-top">
-      <el-button class="mr-10" type="primary" @click="openPopover">新增</el-button>
+      <el-button class="mr-10" type="primary" @click="openPopover();resetFormData()">新增</el-button>
       <el-input class="mr-10" v-model="selectInput" style="width: 200px;" placeholder="导航链接模糊搜索"></el-input>
-      <el-button type="primary" @click="">搜索</el-button>
+      <el-select class="mr-10" v-model="jumpId" placeholder="导航类型" @change="getLinkList">
+        <el-option :label="item.jump_tag" :value="item.jump_id" v-for="item in jumpList" :key="item.jump_id"></el-option>
+      </el-select>
+      <el-button @click="initFilterData">重置</el-button>
+      <el-button type="primary" @click="getLinkList">搜索</el-button>
     </div>
     <el-table :data="linkList" style="width: 100%">
       <el-table-column prop="link_name" label="导航名称" width="180"></el-table-column>
@@ -47,6 +51,9 @@
         <el-form-item label="导航描述" prop="link_desc">
           <el-input v-model="formData.link_desc" />
         </el-form-item>
+        <el-form-item label="导航图标地址" prop="link_url">
+          <el-input v-model="formData.link_icon" />
+        </el-form-item>
         <el-form-item label="导航跳转链接" prop="link_url">
           <el-input v-model="formData.link_url" />
         </el-form-item>
@@ -54,7 +61,7 @@
           <el-input v-model="formData.link_priority" type="number" placeholder="权重越大排序越先"/>
         </el-form-item>
         <el-form-item label="导航链接类型" prop="jump_id">
-          <el-select v-model="formData.jump_id" placeholder="导航链接类型" multiple>
+          <el-select v-model="formData.jump_id" placeholder="导航链接类型">
             <el-option :label="item.jump_tag" :value="item.jump_id" v-for="item in jumpList" :key="item.jump_id"></el-option>
           </el-select>
         </el-form-item>
@@ -63,7 +70,7 @@
       <template #footer>
         <div style="flex: auto">
           <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="submitForm(isAdd)">提交</el-button>
+          <el-button type="primary" @click="onSubmit(isAdd)">提交</el-button>
         </div>
       </template>
     </el-dialog>
@@ -71,17 +78,21 @@
 </template>
 
 <script lang='ts' setup>
-import useDate from '@/hook/common/useDate'
 import usePopover from '@/hook/common/usePopover'
 import useNavLink from '@/hook/nav/useNavLink'
 import useNavType from '@/hook/nav/useNavType'
 import useLinkForm from '@/hook/form/useLinkForm'
 
-const { formatDate } = useDate()
 const { jumpList } = useNavType()
 const { visible, isAdd, openPopover } = usePopover()
-const { navForm, formData, formRule, submitForm, fillForm } = useLinkForm()
-const { total, pageNo, pageSize, linkList, selectInput, getLinkList, deleteLinks } = useNavLink()
+const { navForm, formData, formRule, submitForm, fillForm, resetFormData } = useLinkForm()
+const { total, pageNo, pageSize, jumpId, linkList, selectInput, getLinkList, deleteLinks, initFilterData } = useNavLink()
+const onSubmit = async (isAdd: boolean) => {
+  await submitForm(isAdd)
+  visible.value = false
+  getLinkList()
+
+}
   
 </script>
 

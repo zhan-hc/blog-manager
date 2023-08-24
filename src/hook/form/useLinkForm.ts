@@ -1,6 +1,5 @@
 import { reactive, toRefs, ref } from "vue"
-import { type FormInstance, type FormRules } from 'element-plus'
-import useRouter from '@/hook/common/useRouter'
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { addLink, updateLink } from '@/api/links'
 import { LinkType } from "@/constants/types"
 
@@ -68,11 +67,16 @@ export default function () {
           params.link_id = state.formData.link_id
           await updateLink(params)
         }
+        ElMessage({
+          type: 'success',
+          message: isAdd ? '新建导航链接成功' : '更新导航链接成功',
+        })
       } else {
         console.log('error')
       }
     })
   }
+
   return {
     ...toRefs(state),
     navForm,

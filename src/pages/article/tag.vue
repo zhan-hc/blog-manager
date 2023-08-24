@@ -56,7 +56,6 @@
 
 <script lang='ts' setup>
 import { ref, markRaw, watch } from 'vue'
-// import { ElMessageBox } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
 interface TagItem {

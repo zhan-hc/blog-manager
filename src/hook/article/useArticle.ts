@@ -1,7 +1,6 @@
 import { onMounted, reactive, toRefs, ref } from 'vue'
-import { getArticleList, deleteArticle, updateArticle } from "@/api/atricle";
-import { ArticleType } from '@/constants/types';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { getArticleList, deleteArticle, updateArticle } from "@/api/atricle"
+import { ArticleType } from '@/constants/types'
 
 export default function () {
 
