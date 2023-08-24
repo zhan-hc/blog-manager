@@ -5,9 +5,11 @@
         <span>后台博客管理系统</span>
       </div>
       <div class="right">
-        <span v-if="user_name" style="margin-right: 10px;">{{ user_name }}</span>
         <el-dropdown>
-          <img v-if="avatar_url" :src="avatar_url" alt="" width="28" height="28" style="border-radius: 50%;" />
+          <div v-if="user_name" style="display: flex;align-items: center;">
+            <span style="margin-right: 10px;font-weight: bold;">{{ user_name }}</span>
+            <img v-if="avatar_url" :src="avatar_url" alt="" width="28" height="28" style="border-radius: 50%;" />
+          </div>
           <div v-else>未登录</div>
           <template #dropdown>
             <el-dropdown-menu>

@@ -8,6 +8,7 @@
     "dev:prod": "vite --host 0.0.0.0 --mode prod",
     "build": "vite build --mode prod",
     "deploy": "vite build --mode prod & node deploy.js",
+    "upload": "node deploy.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,8 +27,10 @@
     "@types/axios": "^0.14.0",
     "@types/node": "^20.4.5",
     "@vitejs/plugin-vue": "^4.2.3",
+    "ora": "^7.0.1",
     "sass": "^1.64.0",
     "sass-loader": "^13.3.2",
+    "scp2": "^0.5.0",
     "typescript": "^5.0.2",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-icons": "^0.16.5",

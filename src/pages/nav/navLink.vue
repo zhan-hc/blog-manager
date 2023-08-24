@@ -20,8 +20,8 @@
       <el-table-column prop="link_priority" label="权重" width="100" ></el-table-column>
       <el-table-column prop="link_icon" label="导航logo" width="200">
         <template #default="scope">
-          <div v-if="scope.row.article_cover" style="width: 120px;height: 120px;border-radius: 6px;">
-            <img :src="scope.row.article_cover" alt="" style="width: 100%;height: 100%;object-fit: contain;">
+          <div v-if="scope.row.link_icon" style="width: 30px;height: 30px;">
+            <img :src="scope.row.link_icon" alt="" style="width: 100%;height: 100%;object-fit: contain;">
           </div>
           <span v-else>无logo</span>
         </template>
