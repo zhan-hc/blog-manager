@@ -51,7 +51,7 @@
         <el-form-item label="导航描述" prop="link_desc">
           <el-input v-model="formData.link_desc" />
         </el-form-item>
-        <el-form-item label="导航图标地址" prop="link_url">
+        <el-form-item label="导航图标地址" prop="link_icon">
           <el-input v-model="formData.link_icon" />
         </el-form-item>
         <el-form-item label="导航跳转链接" prop="link_url">

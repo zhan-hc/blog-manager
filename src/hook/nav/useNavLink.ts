@@ -57,6 +57,7 @@ export default function () {
   const initFilterData = () => {
     state.selectInput = ''
     state.jumpId = null
+    getLinkList()
   }
 
   onMounted(async () => {
