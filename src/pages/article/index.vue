@@ -70,10 +70,9 @@
 import useArticle from '@/hook/article/useArticle'
 import useTag from '@/hook/article/useTag'
 import useCategory from '@/hook/article/useCategory'
-import useDate from '@/hook/common/useDate'
 import useRouter from '@/hook/common/useRouter'
+import { formatDate } from '@/utils/date'
 
-const { formatDate } = useDate()
 const { routerGo } = useRouter()
 const { tagList } = useTag()
 const { categoryList } = useCategory()

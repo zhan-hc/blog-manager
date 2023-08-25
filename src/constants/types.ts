@@ -49,3 +49,13 @@ export interface jumpType {
   jump_desc: string;
   jump_priority: number;
 }
+
+export enum RenderType {
+  SVGRenderer = 'SVGRenderer',
+  CanvasRenderer = 'CanvasRenderer'
+}
+export enum ThemeType {
+  Light = 'light',
+  Dark = 'dark',
+  Default = 'default'
+}
