@@ -7,7 +7,8 @@ export default function () {
     categoryList: CategoryType[];
     total: number;
   } = reactive({
-    categoryList: []
+    categoryList: [],
+    total: 0
   })
 
   onMounted(async () => {
