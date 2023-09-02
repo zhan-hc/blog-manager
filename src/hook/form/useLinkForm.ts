@@ -57,11 +57,13 @@ export default function () {
       link_desc: state.formData.link_desc,
       link_url: state.formData.link_url,
       jump_id: state.formData.jump_id,
-      link_priority: state.formData.link_priority
+      link_priority: state.formData.link_priority,
+      update_time: +new Date()
     }
     await navForm.value.validate(async (valid, fields) => {
       if (valid) {
         if (isAdd) {
+          params.create_time = +new Date()
           await addLink(params)
         } else {
           params.link_id = state.formData.link_id

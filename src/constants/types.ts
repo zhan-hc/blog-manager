@@ -41,6 +41,8 @@ export interface LinkType {
   link_url: string;
   jump_id: number;
   link_priority: number;
+  create_time?: number;
+  update_time?: number;
 }
 
 export interface jumpType {
@@ -48,6 +50,8 @@ export interface jumpType {
   jump_tag: string;
   jump_desc: string;
   jump_priority: number;
+  create_time?: number;
+  update_time?: number;
 }
 
 export enum RenderType {

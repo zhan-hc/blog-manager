@@ -43,11 +43,13 @@ export default function () {
     const params: jumpType = {
       jump_tag: state.formData.jump_tag,
       jump_desc: state.formData.jump_desc,
-      jump_priority: state.formData.jump_priority
+      jump_priority: state.formData.jump_priority,
+      update_time: +new Date()
     }
     await navForm.value.validate(async (valid, fields) => {
       if (valid) {
         if (isAdd) {
+          params.create_time = +new Date()
           await addJump(params)
         } else {
           params.jump_id = state.formData.jump_id

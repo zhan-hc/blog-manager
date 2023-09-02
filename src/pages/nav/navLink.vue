@@ -33,6 +33,16 @@
           <el-button type="danger" size="small" @click="deleteLinks(scope.row)">删除</el-button>
         </template>
       </el-table-column>
+      <el-table-column prop="create_time" label="创建时间" width="180">
+        <template #default="scope">
+          <span>{{ formatDate(scope.row.create_time) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="update_time" label="更改时间" width="180" >
+        <template #default="scope">
+          <span>{{ formatDate(scope.row.update_time) }}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination background layout="prev, pager, next" :total="total" v-model:page-size="pageSize" v-model:current-page="pageNo"
     @update:current-page="getLinkList" @update:page-size="getLinkList"/>
@@ -78,6 +88,7 @@
 </template>
 
 <script lang='ts' setup>
+import { formatDate } from '@/utils/date'
 import usePopover from '@/hook/common/usePopover'
 import useNavLink from '@/hook/nav/useNavLink'
 import useNavType from '@/hook/nav/useNavType'

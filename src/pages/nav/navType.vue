@@ -16,6 +16,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-table-column prop="create_time" label="创建时间" width="180">
+        <template #default="scope">
+          <span>{{ formatDate(scope.row.create_time) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="update_time" label="更改时间" width="180" >
+        <template #default="scope">
+          <span>{{ formatDate(scope.row.update_time) }}</span>
+        </template>
+      </el-table-column>
     <el-pagination background layout="prev, pager, next" :total="total" v-model:page-size="pageSize" v-model:current-page="pageNo"
     @update:current-page="getJumpList" @update:page-size="getJumpList"/>
     <el-dialog v-model="visible" :title="isAdd ? '新增导航类型' : '编辑导航类型'">
@@ -49,6 +59,7 @@
 </template>
 
 <script lang='ts' setup>
+import { formatDate } from '@/utils/date'
 import usePopover from '@/hook/common/usePopover'
 import useNavType from '@/hook/nav/useNavType'
 import useJumpForm from '@/hook/form/useJumpForm'
