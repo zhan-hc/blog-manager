@@ -63,3 +63,15 @@ export enum ThemeType {
   Dark = 'dark',
   Default = 'default'
 }
+export interface Page {
+  pageSize: number;
+  pageNo: number;
+}
+
+export interface TagListParams extends Page {
+  tag_name: string;
+}
+
+export interface CategoryListParams extends Page {
+  category_name: string;
+}

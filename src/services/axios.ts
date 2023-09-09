@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios';
-import { RequestOptions} from './type';
+import { RequestOptions } from './type';
 import { AxiosCanceler } from './cancel';
 import { handleNetworkError } from './tool';
 class MyAxios {
@@ -54,14 +54,14 @@ class MyAxios {
 
   request<T>(config: AxiosRequestConfig): Promise<[any, T | undefined]> {
     return new Promise((resolve, reject) => {
-      this.instance.request<any, T>(config).then((res:any) => {
+      this.instance.request<any, T>(config).then((res: any) => {
         const { data } = res.data
         resolve([null, data])
       })
-      .catch((err) => {
-        reject([err, undefined])
-        return err
-      })
+        .catch((err) => {
+          reject([err, undefined])
+          return err
+        })
     })
   }
 }
