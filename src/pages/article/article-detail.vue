@@ -18,7 +18,8 @@
           <el-input v-model="formData.article_title" />
         </el-form-item>
         <el-form-item label="文章封面" prop="article_cover">
-          <el-upload
+          <!-- 上传组件 -->
+          <!-- <el-upload
             class="image-uploader"
             :action="`${envApiHost}/upload/file`"
             :show-file-list="false"
@@ -27,7 +28,9 @@
           >
             <img v-if="formData.article_cover" :src="formData.article_cover" class="article-image" />
             <el-icon v-else class="image-uploader-icon"><Plus /></el-icon>
-          </el-upload>
+          </el-upload> -->
+          <el-input v-model="formData.article_cover"  placeholder="文章封面链接"/>
+          <img v-if="formData.article_cover" :src="formData.article_cover" width="80" height="80" style="margin-top: 20px"/>
         </el-form-item>
         <el-form-item label="文章描述" prop="article_desc">
           <el-input v-model="formData.article_desc" />
