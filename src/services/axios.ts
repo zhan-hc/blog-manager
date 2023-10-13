@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, CreateAxiosDef
 import { RequestOptions } from './type';
 import { AxiosCanceler } from './cancel';
 import { handleNetworkError } from './tool';
+import { envPageHost } from '@/utils/env';
 class MyAxios {
   instance: AxiosInstance;
   customOptions?: RequestOptions;
@@ -45,7 +46,7 @@ class MyAxios {
           message: handleNetworkError(err?.response?.status || err.code)
         })
         if (err?.response?.status === 401) {
-          window.location = "/admin/login" // 因在服务器配置了admin前缀所以此处需要加/admin
+          window.location = `${envPageHost}/admin/login` // 因在服务器配置了admin前缀所以此处需要加/admin
         }
         console.error(handleNetworkError(err?.response?.status || err.code), err.message)
       }

@@ -3,9 +3,17 @@ import MyRequest from '@/services/index'
  * 调用demo
  * cosnt [err, res] = await getUser()
 */
-export const getLinkData = () => {
+export const getLinkData = (params:any = {}) => {
   return MyRequest.request({
     url: '/bury/getLinkData',
-    method: 'GET'
+    method: 'GET',
+    params
+  })
+}
+export const getPvAndUv = (params:any = {}) => {
+  return MyRequest.request({
+    url: '/bury/getPvAndUv',
+    method: 'GET',
+    params
   })
 }

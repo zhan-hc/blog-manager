@@ -75,3 +75,8 @@ export interface TagListParams extends Page {
 export interface CategoryListParams extends Page {
   category_name: string;
 }
+
+export interface echartDataType {
+  value: number;
+  name: string;
+}
