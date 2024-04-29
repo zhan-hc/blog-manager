@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
           path: "/navLink",
           name: "navLink",
           component: () => import("@/pages/nav/navLink.vue")
+        },
+        {
+          path: "/project",
+          name: "project",
+          component: () => import("@/pages/project/index.vue")
         }
     ]
   },

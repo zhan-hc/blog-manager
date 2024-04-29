@@ -80,3 +80,13 @@ export interface echartDataType {
   value: number;
   name: string;
 }
+
+export interface ProjectType {
+  project_id?: number;
+  project_url: string;
+  project_imgurl: string;
+  project_name: string;
+  project_desc: string;
+  create_time?: number;
+  update_time?: number;
+}

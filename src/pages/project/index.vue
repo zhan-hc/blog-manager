@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="tag-top">
-      <el-button class="mr-10" type="primary" @click="tapOpenPopup(); openPopover()"> <i-ep-plus style="font-size: 16px;"
+      <el-button class="mr-10" type="primary" @click="openPopover()"> <i-ep-plus style="font-size: 16px;"
           class="icon_button"></i-ep-plus>创建</el-button>
-      <el-input v-model="page.category_name" style="width: 200px;" class="mr-10" placeholder="文章标题模糊搜索">
+      <el-input v-model="searchData.project_name" style="width: 200px;" class="mr-10" placeholder="文章项目模糊搜索">
         <template #suffix>
           <i-ep-search style="font-size: 12px;"></i-ep-search>
         </template>
@@ -12,9 +12,16 @@
       <el-button @click="tapSearchReset">重置</el-button>
     </div>
     <div class="content">
-      <el-table :data="categoryList" :row-key="(row: any) => row.category_id" style="width: 100%">
-        <el-table-column prop="category_name" label="名称" />
-        <el-table-column prop="category_desc" label="描述" />
+      <el-table :data="projectData.projectList" style="width: 100%">
+        <el-table-column prop="project_name" label="项目名称" />
+        <el-table-column prop="project_imgurl" label="项目预览图">
+          <template #default="scope">
+            <div style="width: 120px;height: 140px;border-radius: 6px;">
+              <img :src="scope.row.project_imgurl" alt="" style="width: 100%;height: 100%;object-fit: contain;">
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="project_url" label="项目链接" />
         <el-table-column prop="create_time" label="创建时间" width="180">
           <template #default="scope">
             <span>{{ formatDate(scope.row.create_time) }}</span>
@@ -27,7 +34,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button class="mr-10" type="warning" @click="tapOpenPopup(scope.row.category_id); openPopover(false)">
+            <el-button class="mr-10" type="warning" @click="setFormData(scope.row); openPopover(false)">
               <i-ep-edit class="icon_button"></i-ep-edit>
               编辑
             </el-button>
@@ -39,13 +46,19 @@
         </el-table-column>
       </el-table>
       <!-- 编辑和新增弹窗 -->
-      <el-dialog v-model="visible" :title="isAdd ? '添加' : '编辑'" @close="offPopup">
-        <el-form ref="categoryFormRef" label-width="80px" :model="popupFormData" :rules="rules">
-          <el-form-item label="名称" prop="category_name">
-            <el-input v-model="popupFormData.category_name" />
+      <el-dialog v-model="visible" :title="isAdd ? '添加' : '编辑'" @close="closePop">
+        <el-form ref="projectFormRef" label-width="120px" :model="formData" :rules="rules">
+          <el-form-item label="项目名称" prop="project_name">
+            <el-input v-model="formData.project_name" />
           </el-form-item>
-          <el-form-item label="描述" prop="category_desc">
-            <el-input v-model="popupFormData.category_desc" />
+          <el-form-item label="项目跳转链接" prop="project_url">
+            <el-input v-model="formData.project_url" />
+          </el-form-item>
+          <el-form-item label="项目描述" prop="project_desc">
+            <el-input v-model="formData.project_desc" />
+          </el-form-item>
+          <el-form-item label="项目展示图" prop="project_desc">
+            <el-input v-model="formData.project_imgurl" />
           </el-form-item>
         </el-form>
         <template #footer>
@@ -65,28 +78,33 @@
       current-page--当前页数
     -->
     <div class="pagination_box">
-      <el-pagination background layout="prev, pager, next" :total=total v-model:page-size="page.pageSize"
-        v-model:current-page="page.pageNo" @update:current-page="getCategoryListFun"
-        @update:page-size="getCategoryListFun" />
+      <el-pagination background layout="prev, pager, next" :total="projectData.total" v-model:page-size="searchData.pageSize"
+        v-model:current-page="searchData.pageNo" @update:current-page="getProjectData"
+        @update:page-size="getProjectData" />
     </div>
   </div>
 </template>
 
 <script lang='ts' setup>
+import { onMounted } from 'vue'
 import { formatDate } from '@/utils/date'
-import useCategory from '@/hook/article/useCategory'
+import useProject from '@/hook/project/useProject'
 import usePopover from '@/hook/common/usePopover'
-import useCategoryForm from '@/hook/form/useCategoryForm'
+import useProjectForm from '@/hook/form/useProjectForm'
 
-const { categoryList, total, page, getCategoryListFun, tapDelete, tapSearch, tapSearchReset } = useCategory('page')
-const { popupFormData, rules, categoryFormRef, tapOpenPopup, offPopup, submitForm } = useCategoryForm()
+const { searchData, projectData, getProjectData } = useProject()
+const { formData, rules, projectFormRef, setFormData, closePop, submitForm } = useProjectForm()
 const { visible, isAdd, openPopover } = usePopover()
+
+onMounted(async () => {
+  await getProjectData()
+})
 
 // 点击弹窗确定
 const onSubmit = async (isAdd: boolean) => {
   await submitForm(isAdd)
   visible.value = false
-  getCategoryListFun()
+  await getProjectData()
 }
 
 </script>

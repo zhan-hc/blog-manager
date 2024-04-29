@@ -35,6 +35,10 @@
             <el-menu-item index="/navLink">导航链接管理</el-menu-item>
             <el-menu-item index="/navType">导航类型管理</el-menu-item>
           </el-sub-menu>
+          <el-sub-menu index="4">
+            <template #title>博客项目管理</template>
+            <el-menu-item index="/project">项目管理</el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
       <el-main>

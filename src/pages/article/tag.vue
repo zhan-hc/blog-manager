@@ -15,8 +15,16 @@
       <el-table :data="tagList" :row-key="(row: any) => row.tag_id" style="width: 100%">
         <el-table-column prop="tag_name" label="名称" />
         <el-table-column prop="tag_desc" label="描述" />
-        <el-table-column prop="create_time" label="创建时间" />
-        <el-table-column prop="update_time" label="更改时间" />
+        <el-table-column prop="create_time" label="创建时间" width="180">
+          <template #default="scope">
+            <span>{{ formatDate(scope.row.create_time) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="update_time" label="更改时间" width="180" >
+          <template #default="scope">
+            <span>{{ formatDate(scope.row.update_time) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button class="mr-10" type="warning" @click="tapOpenPopup(scope.row.tag_id); openPopover(false)">
@@ -64,6 +72,7 @@
 </template>
 
 <script lang='ts' setup>
+import { formatDate } from '@/utils/date'
 import useTag from '@/hook/article/useTag'
 import usePopover from '@/hook/common/usePopover'
 import useTagForm from '@/hook/form/useTagForm'
