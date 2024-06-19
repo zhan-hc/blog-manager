@@ -1,6 +1,6 @@
 import { reactive, toRefs, ref } from 'vue'
-import { getCategoryToId, updateCategory, addCategory } from '@/api/category'
 import type { FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { ProjectType } from '@/constants/types'
 import { addProject, updateProject } from '@/api/project'
 

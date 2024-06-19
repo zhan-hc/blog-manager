@@ -61,7 +61,6 @@
 </script>
 
 <style scoped lang='scss'>
-  
 .el-header {
   display: flex;
   justify-content: space-between;

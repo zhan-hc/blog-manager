@@ -3,35 +3,65 @@
     <div class="home-header"></div>
     <div class="home-content">
       <div class="card-wrap">
-        <div class="card-item">
+        <div class="card-item card">
           <div class="hd">
             <img src="@/assets/image/icon-article.png" alt="">
             <span>文章</span>
           </div>
           <div class="md count">{{articleTotal}}</div>
         </div>
-        <div class="card-item">
+        <div class="card-item card">
           <div class="hd">
             <img src="@/assets/image/icon-category.png" alt="">
             <span>分类</span>
           </div>
           <div class="md count">{{categoryTotal}}</div>
         </div>
-        <div class="card-item">
+        <div class="card-item card">
           <div class="hd">
             <img src="@/assets/image/icon-tag.png" alt="">
             <span>标签</span>
           </div>
           <div class="md count">{{tagTotal}}</div>
         </div>
-        <div class="card-item">
+        <div class="card-item card">
           <div class="hd">
             <span>uv-访客数量</span>
           </div>
           <div class="md count">{{uvData}}</div>
         </div>
       </div>
-      <div class="filter">
+      <div class="rank-container">
+        <div class="rank-box card">
+          <div class="rank-title">快捷导航常用榜</div>
+          <div class="rank-list">
+            <div class="rank-item" v-for="(item, i) in rankNavData" :key="i">
+              <span class="rank-num">{{ i + 1 }}.</span>
+              <span class="rank-name">{{ item.name }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="rank-box card">
+          <div class="rank-title">博客文章欢迎榜</div>
+          <div class="rank-list">
+            <div class="rank-item" v-for="(item, i) in rankArticleData" :key="i">
+              <span class="rank-num">{{ i + 1 }}.</span>
+              <span class="rank-name">{{ item.name }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="rank-box card">
+          <div class="rank-title">博客标签访问榜</div>
+          <div class="rank-list">
+            <div class="rank-item" v-for="(item, i) in rankTagData" :key="i">
+              <span class="rank-num">{{ i + 1 }}.</span>
+              <span class="rank-name">{{ item.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- <div class="filter">
         <div class="item">
           <div>起始时间：</div>
           <el-date-picker
@@ -44,7 +74,7 @@
           />
         </div>
         <el-button style="margin-left: 20px" @click="initParams">重置</el-button>
-      </div>
+      </div> -->
       
       <div class="statistics">
         <pie :data="navPieData" title="快捷导航埋点数据"></pie>
@@ -56,13 +86,14 @@
 </template>
 
 <script lang='ts' setup>
-  import pie from './components/pie.vue'
+  import dayjs from 'dayjs'
+  import { onMounted, reactive, toRefs } from 'vue'
+  import { getLinkData, getPvAndUv } from '@/api/bury'
   import useTag from '@/hook/article/useTag'
   import useCategory from '@/hook/article/useCategory'
   import useArticle from '@/hook/article/useArticle'
-  import { getLinkData, getPvAndUv } from '@/api/bury'
-  import { onMounted, reactive, toRefs } from 'vue'
-  import dayjs from 'dayjs'
+  import useStatistics from '@/hook/statistics/useStatistics'
+  import pie from './components/pie.vue'
 
   const { total: tagTotal } = useTag()
   const { total: categoryTotal } = useCategory()
@@ -72,9 +103,13 @@
     startEndTime: [],
     navPieData: [],
     pvData: [],
-    uvData: 0
+    uvData: 0,
+    rankNavData: [],
+    rankArticleData: [],
+    rankTagData: []
   })
-  const { navPieData, pvData, uvData, startEndTime } = toRefs(state)
+  const { navPieData, pvData, uvData, startEndTime, rankNavData, rankArticleData, rankTagData } = toRefs(state)
+  const { getBuryCount } = useStatistics()
 
   const timeChange = (time:any) => {
     init()
@@ -90,7 +125,7 @@
       params.startTime = dayjs(startEndTime.value[0]).valueOf()
       params.endTime = dayjs(startEndTime.value[1]).valueOf()
     }
-    const [_err, navdata ] = await getLinkData(params)
+    const navdata = await getBuryCount(params)
     state.navPieData = navdata.map((item: any) => {
     return {
       value: item.count,
@@ -98,6 +133,48 @@
       }
     })
   }
+
+  const getRankNav = async () => {
+    const data = await getBuryCount({
+      eventName: '快捷导航-',
+      startTime: 204012815000,
+      limit: 5
+    })
+    state.rankNavData = data.map((item: { event_name: string, count: number }) => {
+      return {
+        name: item.event_name.replace('快捷导航-', ''),
+        ...item
+      }
+    })
+  }
+  const getRankArticle = async () => {
+    const data = await getBuryCount({
+      eventName: '博客文章-',
+      startTime: 204012815000,
+      limit: 5
+    })
+    state.rankArticleData = data.map((item: { event_name: string, count: number }) => {
+      return {
+        name: item.event_name.replace('博客文章-', ''),
+        ...item
+      }
+    })
+  }
+
+  const getRankTag = async () => {
+    const data = await getBuryCount({
+      eventName: '博客标签_',
+      startTime: 204012815000,
+      limit: 5
+    })
+    state.rankTagData = data.map((item: { event_name: string, count: number }) => {
+      return {
+        name: item.event_name.replace(/博客标签_(.*)页面/, '$1'),
+        ...item
+      }
+    })
+  }
+
   const getPvUvData = async () => {
     const params: any = {eventType: 'view'}
     if (startEndTime.value.length > 1) {
@@ -115,6 +192,9 @@
   }
 
   const init = async () => {
+    await getRankNav()
+    await getRankArticle()
+    await getRankTag()
     await getNavData()
     await getPvUvData()
   }
@@ -138,8 +218,6 @@
           width: 200px;
           padding: 10px 0;
           box-sizing: border-box;
-          box-shadow: 0 4px 8px 6px rgba(7,17,27,0.06);
-          border-radius: 6px;
           margin-right: 40px;
           &:last-child {
             margin-right: 0;
@@ -167,7 +245,51 @@
           }
         }
       }
+      .rank-container {
+        .rank-box {
+          display: inline-flex;
+          flex-direction: column;
+          margin-right: 20px;
+          padding: 20px;
+          .rank-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f5fffa;
+          }
+          .rank-list {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+            .rank-item {
+              display: flex;
+              margin-bottom: 5px;
+              .rank-name {
+                margin-left: 20px;
+                font-size: 18px;
+                font-weight: bold;
+              }
+              .rank-num {
+                // flex: 1;
+                font-weight: bold;
+                color: #222226;
+              }
+            }
+            
+          }
+          &:first-child {
+            background-image: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
+          }
+          &:nth-child(2) {
+            background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 48%, #6654F1 100%);
+          }
+          &:nth-child(3) {
+            background-image: linear-gradient(-225deg, #CBBACC 0%, #2580B3 100%);
+          }
+        }
+      }
+      
       .filter {
+        margin-top: 40px;
         display: flex;
         align-items: center;
         .item {
@@ -176,8 +298,8 @@
         }
       }
       .statistics {
-        display: flex;
-        margin-top: 20px;
+        display: inline-flex;
+        margin-top: 40px;
       }
     }
   }
