@@ -71,7 +71,6 @@ const onSubmit = async (isAdd: boolean) => {
   await submitForm(isAdd)
   visible.value = false
   getJumpList()
-
 }
   
 </script>

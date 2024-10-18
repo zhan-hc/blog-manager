@@ -22,23 +22,15 @@
     <el-container class="main-container">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu default-active="/" class="el-menu-vertical-demo" router>
-          <el-menu-item index="/">主页</el-menu-item>
-          <el-menu-item index="/user">个人信息管理</el-menu-item>
-          <el-sub-menu index="2">
-            <template #title >文章管理</template>
-            <el-menu-item index="/article">内容管理</el-menu-item>
-            <el-menu-item index="/category">分类管理</el-menu-item>
-            <el-menu-item index="/tag">标签管理</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="3">
-            <template #title>快捷导航管理</template>
-            <el-menu-item index="/navLink">导航链接管理</el-menu-item>
-            <el-menu-item index="/navType">导航类型管理</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="4">
-            <template #title>博客项目管理</template>
-            <el-menu-item index="/project">项目管理</el-menu-item>
-          </el-sub-menu>
+          <template v-for="item in menuList" :key="item.menu_id">
+            <el-menu-item v-if="!item.children" :index="item.menu_url">
+              {{ item.menu_name }}
+            </el-menu-item>
+            <el-sub-menu v-else-if="item?.children.length > 0" :index="`${item.menu_id}`">
+              <template #title>{{ item.menu_name }}</template>
+              <el-menu-item v-for="submenu in item.children" :key="submenu.menu_id" :index="submenu.menu_url">{{ submenu.menu_name }}</el-menu-item>
+            </el-sub-menu>
+          </template>
         </el-menu>
       </el-aside>
       <el-main>
@@ -49,11 +41,20 @@
 </template>
 
 <script lang='ts' setup>
-  import useRouter from '@/hook/common/useRouter'
-  import { Local } from "@/utils/local"
+import { computed, onMounted, ref } from 'vue'
+import { MENU_KEY } from '@/constants'
+import useRouter from '@/hook/common/useRouter'
+import { Local } from "@/utils/local"
+import { getMenuToTree } from "@/utils/route";
 
   const { routerGo } = useRouter()
   const { avatar_url = '', user_name = '', user_id = '' } = Local.get('userInfo') || {}
+  const menuList = ref([])
+
+  onMounted(() => {
+    const menuData = Local.get(MENU_KEY) || []
+    menuList.value = getMenuToTree(menuData)
+  })
   const logout = () => {
     Local.clear()
     routerGo('/login')

@@ -41,9 +41,10 @@ class MyAxios {
         return res
       },
       (err: any) => {
+        console.log(err.response?.data?.message, 'errr')
         ElMessage({
           type: 'error',
-          message: handleNetworkError(err?.response?.status || err.code)
+          message: err?.response?.data?.message || handleNetworkError(err?.response?.status || err.code)
         })
         if (err?.response?.status === 401) {
           window.location = `${envPageHost}/login`

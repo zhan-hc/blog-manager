@@ -1,19 +1,32 @@
+import { useCommonStore } from "@/store/common";
+import { addPageToRouter } from "@/utils/route";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
-const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
+    name: "Layout",
     component: () => import("@/pages/index.vue"),
     children: [
         {
-          path: "",
+          path: "/",
           name: "Home",
           component: () => import("@/pages/home/index.vue")
         },
         {
+          path: "/statistics",
+          name: "Statistics",
+          component: () => import("@/pages/statistics/index.vue")
+        },
+        {
           path: "/user",
           name: "User",
-          component: () => import("@/pages/user/index.vue")
+          component: () => import("@/pages/system/user.vue")
+        },
+        {
+          path: "/role",
+          name: "Role",
+          component: () => import("@/pages/system/role.vue")
         },
         {
           path: "/article",
@@ -59,9 +72,35 @@ const routes: Array<RouteRecordRaw> = [
   }
 ];
 
+export const basicRoutes: Array<RouteRecordRaw> = [
+  {
+    path: "/login",
+    name: 'Login',
+    component: () => import("@/pages/login.vue"),
+  },
+  {
+    path: "/404",
+    name: '404',
+    component: () => import("@/pages/404.vue"),
+  }
+]
+
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: basicRoutes,
 });
+
+router.beforeEach((to, from, next)=> {
+  const { addRouters } = useCommonStore()
+  if (!addRouters) {
+    addPageToRouter()
+    next({ ...to }) // 确保路由已完成
+  } else {
+    if (to.matched.length === 0) {
+      next({ name: '404' })
+    }
+    next()
+  }
+})
 
 export default router;
