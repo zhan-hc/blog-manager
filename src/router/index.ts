@@ -45,18 +45,28 @@ export const routes: Array<RouteRecordRaw> = [
         },
         {
           path: "/navType",
-          name: "navType",
+          name: "NavType",
           component: () => import("@/pages/nav/navType.vue")
         },
         {
           path: "/navLink",
-          name: "navLink",
+          name: "NavLink",
           component: () => import("@/pages/nav/navLink.vue")
         },
         {
           path: "/project",
-          name: "project",
+          name: "Project",
           component: () => import("@/pages/project/index.vue")
+        },
+        {
+          path: "/dict",
+          name: "Dict",
+          component: () => import("@/pages/system/dict.vue")
+        },
+        {
+          path: "/event",
+          name: "Event",
+          component: () => import("@/pages/event/index.vue")
         }
     ]
   },

@@ -13,11 +13,13 @@ export default function ({
       pageNo: 1,
       pageSize: 10,
       total: 0
-    }
+    },
+    searchData: {}
   })
 
   const params = computed(() => {
     return {
+      ...state.searchData,
       pageNo: state.pageData.pageNo,
       pageSize: state.pageData.pageSize
     }
@@ -37,6 +39,13 @@ export default function ({
     handleGetData()
   }
 
+  /**
+   * 刷新搜索条件字段
+   */
+  const refreshSearchData = (data: any) => {
+    state.searchData = data
+  }
+
   onMounted(() => {
     immediate && handleGetData()
   })
@@ -44,6 +53,7 @@ export default function ({
   return {
     ...toRefs(state),
     handleGetData,
-    initPageParams
+    initPageParams,
+    refreshSearchData
   }
 }

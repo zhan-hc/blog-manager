@@ -51,5 +51,7 @@ export const getMenuToTree = (routerArr: any) => {
       menuObj[item.parent_menu_id].children.push(item)
     }
   })
-  return Object.keys(menuObj).map(item => menuObj[item])
+  return Object.keys(menuObj).map(item => menuObj[item]).sort((a, b) => {
+    return b.menu_priority - a.menu_priority
+  })
 }

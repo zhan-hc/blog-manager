@@ -1,9 +1,15 @@
 <template>
   <div class="table-box">
-    <el-table :data="tableData" :row-key="row => row.role_id" style="width: 100%">
-      <el-table-column prop="role_id" label="角色id" />
-      <el-table-column prop="role_name" label="角色名称" />
-      <el-table-column prop="role_desc" label="角色描述" />
+    <el-button class="mr-10" type="primary" @click="openPopover()"><i-ep-plus style="font-size: 16px;" class="icon_button"></i-ep-plus>新增</el-button>
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="id" />
+      <el-table-column prop="name" label="字典名称" />
+      <el-table-column prop="desc" label="字典描述" />
+      <el-table-column prop="status" label="状态">
+        <template #default="scope">
+          <span v-if="scope.row.status">{{ scope.row.status ? '启用' : '停用' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="create_time" label="创建时间" width="180">
         <template #default="scope">
           <span v-if="scope.row.create_time">{{ formatDate(scope.row.create_time) }}</span>
@@ -28,31 +34,19 @@
       </el-table-column>
     </el-table>
     <!-- 编辑和新增弹窗 -->
-    <el-dialog v-model="visible" title="编辑">
+    <el-dialog v-model="visible" :title="isAdd ? '添加' : '编辑'">
       <el-form label-width="80px" :model="formData" >
-        <el-form-item label="用户名称" prop="role_name">
-          <el-input v-model="formData.role_name" />
+        <el-form-item label="字典名称" prop="name">
+          <el-input v-model="formData.name" />
         </el-form-item>
-        <el-form-item label="个性签名" prop="signature">
-          <el-input v-model="formData.signature" />
+        <el-form-item label="字典描述" prop="desc">
+          <el-input v-model="formData.desc" />
         </el-form-item>
-        <el-form-item label="头像链接" prop="avatar_url">
-          <el-input v-model="formData.avatar_url" />
-        </el-form-item>
-        <el-form-item label="用户角色" prop="role_id">
-          <el-select
-            v-model="formData.role_id"
-            placeholder="请选择用户角色"
-            size="large"
-            style="width: 240px"
-          >
-            <el-option
-              v-for="item in roleList"
-              :key="item.role_id"
-              :label="item.role_name"
-              :value="item.role_id"
-            />
-          </el-select>
+        <el-form-item label="字典状态" prop="status">
+          <el-radio-group v-model="formData.status">
+            <el-radio :value="1">启用</el-radio>
+            <el-radio :value="0">停用</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -69,28 +63,26 @@
 </template>
 
 <script lang='ts' setup>
-import { deleteRole, getRoleList, updateRole } from "@/api/role";
+import { getDictTypeList, updateDictType, deleteDictType } from "@/api/dict";
 import { formatDate } from '@/utils/date'
 import usePopover from '@/hook/common/usePopover'
 import useTableData from "@/hook/common/useTableData";
 import { ref, onMounted } from "vue";
 
-const roleList: any = ref([])
+const dictList: any = ref([])
 const formData = ref({})
 const { visible, isAdd, openPopover } = usePopover()
 const { tableData, pageData, handleGetData, initPageParams } = useTableData({
-  fetchApi: getRoleList
+  fetchApi: getDictTypeList
 })
 
 const openDialog = (data: any) => {
-  const newData = { ...data }
-  delete newData.role
-  formData.value = newData
+  formData.value = data
   openPopover(false)
 }
 
 const onSubmit = async () => {
-  await updateRole({...formData.value, update_time: +new Date()})
+  await updateDictType({...formData.value, update_time: +new Date()})
   initPageParams()
   visible.value = false
 }
@@ -106,7 +98,7 @@ const handleDelete = async (data: any) => {
       }
     )
       .then(async () => {
-        await deleteRole(data.role_id)
+        await deleteDictType(data.role_id)
         ElMessage({
           message: '删除成功',
           type: 'success',
@@ -115,13 +107,6 @@ const handleDelete = async (data: any) => {
       })
 
   }
-
-onMounted(async () => {
-  const[err, data]:any = await getRoleList()
-  if (!err) {
-    roleList.value = data.rows
-  }
-})
 
 </script>
 
