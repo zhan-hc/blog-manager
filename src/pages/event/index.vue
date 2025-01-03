@@ -68,7 +68,11 @@
     title="info"
     width="500"
   >
-    <span>{{ dialogInfo }}</span>
+  <div class="line" v-for="(item, _index) in dialogInfo" :key="item[0]">
+    <span>{{ item[0] }}：</span>
+    <span>{{ item[1] }}</span>
+  </div>
+    
   </el-dialog>
     <el-pagination background layout="prev, pager, next" :total="pageData.total" v-model:page-size="pageData.pageSize"
       v-model:current-page="pageData.pageNo" @update:current-page="handleGetData"
@@ -83,7 +87,7 @@ import usePopover from '@/hook/common/usePopover'
 import useTableData from "@/hook/common/useTableData";
 import { ref, onMounted, reactive } from "vue";
 
-const dialogInfo = ref('')
+const dialogInfo = ref<string[][]>([])
 const dialogVisible = ref(false)
 const searchData: any = ref({
   event_name: '',
@@ -99,7 +103,15 @@ const { tableData, pageData, handleGetData, initPageParams, refreshSearchData } 
 })
 
 const setDialogInfo = (data: any) => {
-  dialogInfo.value = data
+  if(data)  {
+    let temDialogInfo = JSON.parse(data)
+    dialogInfo.value = Object.keys(temDialogInfo).map(key => {
+    return [key, temDialogInfo[key] || '']
+    }) 
+  }else {
+    dialogInfo.value = []
+  }
+ 
   dialogVisible.value = true
 }
 
@@ -127,6 +139,16 @@ const getDataList = async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .el-dialog {
+    .line {
+      margin-bottom: 10px;
+      span:nth-child(1) {
+        margin-right: 10px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+    }
   }
   .el-pagination {
     margin-top: 20px;
