@@ -5,7 +5,7 @@ import MyRequest from '@/services/index'
 */
 export const getLinkData = (params:any = {}) => {
   return MyRequest.request({
-    url: '/bury/getLinkData',
+    url: '/event/eventList',
     method: 'GET',
     params
   })

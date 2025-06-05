@@ -24,12 +24,12 @@
           </div>
           <div class="md count">{{tagTotal}}</div>
         </div>
-        <div class="card-item card">
+        <!-- <div class="card-item card">
           <div class="hd">
             <span>uv-访客数量</span>
           </div>
           <div class="md count">{{uvData}}</div>
-        </div>
+        </div> -->
       </div>
       <div class="rank-container">
         <div class="rank-box card">
@@ -37,25 +37,25 @@
           <div class="rank-list">
             <div class="rank-item" v-for="(item, i) in rankNavData" :key="i">
               <span class="rank-num">{{ i + 1 }}.</span>
-              <span class="rank-name">{{ item.name }}</span>
+              <span class="rank-name">{{ `${item.name}（${item.count}）` }}</span>
             </div>
           </div>
         </div>
         <div class="rank-box card">
-          <div class="rank-title">博客文章欢迎榜</div>
+          <div class="rank-title">博客文章访问榜</div>
           <div class="rank-list">
             <div class="rank-item" v-for="(item, i) in rankArticleData" :key="i">
               <span class="rank-num">{{ i + 1 }}.</span>
-              <span class="rank-name">{{ item.name }}</span>
+              <span class="rank-name">{{ `${item.name}（${item.count}）` }}</span>
             </div>
           </div>
         </div>
         <div class="rank-box card">
-          <div class="rank-title">博客标签访问榜</div>
+          <div class="rank-title">博客项目访问榜</div>
           <div class="rank-list">
-            <div class="rank-item" v-for="(item, i) in rankTagData" :key="i">
+            <div class="rank-item" v-for="(item, i) in ranProjectData" :key="i">
               <span class="rank-num">{{ i + 1 }}.</span>
-              <span class="rank-name">{{ item.name }}</span>
+              <span class="rank-name">{{ `${item.name}（${item.count}）` }}</span>
             </div>
           </div>
         </div>
@@ -77,8 +77,9 @@
       </div> -->
       
       <div class="statistics">
-        <pie :data="navPieData" title="快捷导航埋点数据"></pie>
-        <pie :data="pvData" title="pv-各页面的浏览数据"></pie>
+        <ec-map :data="visitorData"></ec-map><br>
+        <!-- <pie :data="navPieData" title="快捷导航埋点数据"></pie> -->
+        <!-- <pie :data="pvData" title="pv-各页面的浏览数据"></pie> -->
       </div>
       
     </div>
@@ -89,11 +90,13 @@
   import dayjs from 'dayjs'
   import { onMounted, reactive, toRefs } from 'vue'
   import { getLinkData, getPvAndUv } from '@/api/bury'
+  import { fetchVisitorData } from '@/api/statistics'
   import useTag from '@/hook/article/useTag'
   import useCategory from '@/hook/article/useCategory'
   import useArticle from '@/hook/article/useArticle'
   import useStatistics from '@/hook/statistics/useStatistics'
   import pie from './components/pie.vue'
+  import EcMap from './components/map.vue'
 
   const { total: tagTotal } = useTag()
   const { total: categoryTotal } = useCategory()
@@ -104,11 +107,12 @@
     navPieData: [],
     pvData: [],
     uvData: 0,
+    visitorData: [],
     rankNavData: [],
     rankArticleData: [],
-    rankTagData: []
+    ranProjectData: []
   })
-  const { navPieData, pvData, uvData, startEndTime, rankNavData, rankArticleData, rankTagData } = toRefs(state)
+  const { visitorData, navPieData, pvData, uvData, startEndTime, rankNavData, rankArticleData, ranProjectData } = toRefs(state)
   const { getBuryCount } = useStatistics()
 
   const timeChange = (time:any) => {
@@ -134,45 +138,41 @@
     })
   }
 
-  const getRankNav = async () => {
-    const data = await getBuryCount({
-      eventName: '快捷导航-',
-      startTime: 204012815000,
-      limit: 5
-    })
-    state.rankNavData = data.map((item: { event_name: string, count: number }) => {
-      return {
-        name: item.event_name.replace('快捷导航-', ''),
-        ...item
+  const getSortData = (data: any[], replaceName: string) => {
+    const obj: any = {}
+    data.forEach((item: any) => {
+      const name = item.event_name.replace(replaceName, '')
+      if (!obj[name]) {
+        obj[name] = 0
       }
+      obj[name] += 1
     })
-  }
-  const getRankArticle = async () => {
-    const data = await getBuryCount({
-      eventName: '博客文章-',
-      startTime: 204012815000,
-      limit: 5
-    })
-    state.rankArticleData = data.map((item: { event_name: string, count: number }) => {
-      return {
-        name: item.event_name.replace('博客文章-', ''),
-        ...item
-      }
-    })
+    return Object.keys(obj).map((item: string) => {return {name: item, count: obj[item]}}).sort((a, b) => b.count - a.count).slice(0, 5)
+
   }
 
-  const getRankTag = async () => {
-    const data = await getBuryCount({
-      eventName: '博客标签_',
-      startTime: 204012815000,
-      limit: 5
+  const getRankNav = async () => {
+    const { rows: data }: any = await getBuryCount({
+      event_name: '快捷导航-',
+      event_type: 'click',
     })
-    state.rankTagData = data.map((item: { event_name: string, count: number }) => {
-      return {
-        name: item.event_name.replace(/博客标签_(.*)页面/, '$1'),
-        ...item
-      }
+    state.rankNavData = getSortData(data, '快捷导航-')
+  }
+  const getRankArticle = async () => {
+    const { rows: data }: any = await getBuryCount({
+      event_name: '博客文章-',
+      event_type: 'click',
     })
+    
+    state.rankArticleData = getSortData(data, '博客文章-')
+  }
+
+  const getRankProject = async () => {
+    const { rows: data }: any = await getBuryCount({
+      event_name: '博客项目页面_项目点击_',
+      event_type: 'click',
+    })
+    state.ranProjectData = getSortData(data, '博客项目页面_项目点击_')
   }
 
   const getPvUvData = async () => {
@@ -191,12 +191,30 @@
     state.uvData = data.uv
   }
 
+  const getVisitorData = async () => {
+    const params: any = {
+      type: 'province'
+    }
+    if (startEndTime.value.length > 1) {
+      params.startTime = dayjs(startEndTime.value[0]).valueOf()
+      params.endTime = dayjs(startEndTime.value[1]).valueOf()
+    }
+    const [_err, data ] = await fetchVisitorData(params)
+    state.visitorData = data.map((item: any) => {
+    return {
+      value: item.count,
+      name: item.province
+    }
+    })
+  }
+
   const init = async () => {
+    await getVisitorData()
     await getRankNav()
     await getRankArticle()
-    await getRankTag()
-    await getNavData()
-    await getPvUvData()
+    await getRankProject()
+    // await getNavData()
+    // await getPvUvData()
   }
   onMounted(async () => {
     await init()
