@@ -47,7 +47,7 @@ class MyAxios {
           message: err?.response?.data?.message || handleNetworkError(err?.response?.status || err.code)
         })
         if (err?.response?.status === 401) {
-          // window.location = `${envPageHost}/login`
+          window.location = `${envPageHost}/login`
         }
         console.error(handleNetworkError(err?.response?.status || err.code), err.message)
       }
